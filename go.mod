@@ -1,6 +1,6 @@
 module myproject
 
-go 1.25.0
+go 1.26.3
 
 require github.com/wailsapp/wails/v2 v2.12.0
 

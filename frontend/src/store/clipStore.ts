@@ -9,11 +9,13 @@ interface ClipState {
   searchQuery: string
   isLoading: boolean
 
+  requestVersion: number
+
   // Actions
   setSearchQuery: (query: string) => void
   setSelectedIndex: (index: number | ((prev: number) => number)) => void
   fetchClips: () => Promise<void>
-  initListener: () => void
+  initListener: () => () => void
 }
 
 export const useClipStore = create<ClipState>((set, get) => ({
@@ -21,6 +23,7 @@ export const useClipStore = create<ClipState>((set, get) => ({
   selectedIndex: 0,
   searchQuery: '',
   isLoading: false,
+  requestVersion: 0,
 
   setSearchQuery: (query: string) => {
     set({ searchQuery: query, selectedIndex: 0 })
@@ -35,9 +38,13 @@ export const useClipStore = create<ClipState>((set, get) => ({
           : indexOrUpdater
 
       // Bounds check
-      if (newIndex < 0) newIndex = 0
-      if (state.clips.length > 0 && newIndex >= state.clips.length) {
-        newIndex = state.clips.length - 1
+      if (state.clips.length === 0) {
+        newIndex = 0
+      } else {
+        if (newIndex < 0) newIndex = 0
+        if (newIndex >= state.clips.length) {
+          newIndex = state.clips.length - 1
+        }
       }
 
       return { selectedIndex: newIndex }
@@ -45,8 +52,9 @@ export const useClipStore = create<ClipState>((set, get) => ({
   },
 
   fetchClips: async () => {
-    const { searchQuery } = get()
-    set({ isLoading: true })
+    const { searchQuery, requestVersion } = get()
+    const currentReqVersion = requestVersion + 1
+    set({ isLoading: true, requestVersion: currentReqVersion })
 
     try {
       let result: domain.ClipItem[] | null = null
@@ -59,16 +67,20 @@ export const useClipStore = create<ClipState>((set, get) => ({
       }
 
       // Ensure we always have an array even if the DB returns null
-      set({ clips: result || [], isLoading: false })
+      if (get().requestVersion === currentReqVersion) {
+        set({ clips: result || [], isLoading: false })
+      }
     } catch (err) {
       console.error('Failed to fetch clips:', err)
-      set({ isLoading: false })
+      if (get().requestVersion === currentReqVersion) {
+        set({ isLoading: false })
+      }
     }
   },
 
   initListener: () => {
     // Listen for the event emitted by Go backend when a new clip is copied
-    EventsOn('onNewClip', () => {
+    return EventsOn('onNewClip', () => {
       // Refresh the list immediately
       get().fetchClips()
     })

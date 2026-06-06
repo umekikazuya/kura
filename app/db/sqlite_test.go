@@ -53,7 +53,7 @@ func TestSQLiteRepo_SaveAndGetAll(t *testing.T) {
 	}
 
 	if len(items) != 2 {
-		t.Errorf("expected 2 items, got %d", len(items))
+		t.Fatalf("expected 2 items, got %d", len(items))
 	}
 
 	// Because item2 was inserted last, it should be at the top
@@ -71,18 +71,25 @@ func TestSQLiteRepo_UpsertUpdatesTimestamp(t *testing.T) {
 	content := "Unique Content"
 	item1 := domain.NewClipItem(content)
 
-	_ = repo.Save(ctx, item1)
+	if err := repo.Save(ctx, item1); err != nil {
+		t.Fatalf("failed to save item1: %v", err)
+	}
 
 	// Wait briefly to ensure timestamp difference
 	time.Sleep(10 * time.Millisecond)
 
 	// Upsert the same content
 	item2 := domain.NewClipItem(content)
-	_ = repo.Save(ctx, item2)
+	if err := repo.Save(ctx, item2); err != nil {
+		t.Fatalf("failed to save item2: %v", err)
+	}
 
-	items, _ := repo.GetAll(ctx, 10, 0)
+	items, err := repo.GetAll(ctx, 10, 0)
+	if err != nil {
+		t.Fatalf("failed to get items: %v", err)
+	}
 	if len(items) != 1 {
-		t.Errorf("expected 1 item after upsert, got %d", len(items))
+		t.Fatalf("expected 1 item after upsert, got %d", len(items))
 	}
 
 	if items[0].UpdatedAt.Before(item1.UpdatedAt) || items[0].UpdatedAt.Equal(item1.UpdatedAt) {

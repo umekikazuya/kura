@@ -10,6 +10,10 @@ export function useKeyBindings(
   useEffect(() => {
     // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: Intentional monolithic key handler
     const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.isComposing || e.key === 'Process') {
+        return
+      }
+
       // Don't intercept if user is typing in an input (unless it's the search bar and they press specific keys like ArrowUp/Down)
       const isInputFocused = document.activeElement?.tagName === 'INPUT'
 

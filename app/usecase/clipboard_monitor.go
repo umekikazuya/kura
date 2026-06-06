@@ -69,7 +69,7 @@ func (m *ClipboardMonitor) processClipboard(ctx context.Context) {
 	if err := m.repo.Save(ctx, item); err != nil {
 		log.Printf("Failed to save clip: %v\n", err)
 	} else {
-		log.Printf("Saved new clip: %s...\n", text[:min(len(text), 20)])
+		log.Printf("Saved new clip: ID=%s, Length=%d\n", item.ID, len(text))
 		if m.OnNewClip != nil {
 			m.OnNewClip()
 		}

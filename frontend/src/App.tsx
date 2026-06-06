@@ -174,7 +174,6 @@ function App() {
           placeholder="type / to search..."
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          autoFocus
           style={{ WebkitAppRegion: 'no-drag' } as any}
         />
         <span

@@ -6,7 +6,8 @@
     "useIgnoreFile": true
   },
   "files": {
-    "ignoreUnknown": false
+    "ignoreUnknown": false,
+    "ignore": ["wailsjs/**"]
   },
   "formatter": {
     "enabled": true,
@@ -18,6 +19,9 @@
     "enabled": true,
     "rules": {
       "recommended": true,
+      "nursery": {
+        "useSortedClasses": "warn"
+      },
       "complexity": {
         "noExcessiveCognitiveComplexity": {
           "level": "error",

@@ -1,0 +1,17 @@
+@import "tailwindcss";
+
+@theme {
+  --color-app-bg: #1e1e1e;
+  --color-app-text: #e0e0e0;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: var(--color-app-bg);
+  color: var(--color-app-text);
+  overflow: hidden; /* kura will use virtual scrolling internally */
+  font-family:
+    ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
+    "Segoe UI Symbol", "Noto Color Emoji";
+}

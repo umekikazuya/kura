@@ -7,9 +7,9 @@
   "frontend:dev:install": "",
   "frontend:dev:watcher": "pnpm run dev",
   "frontend:dev:serverUrl": "auto",
-  "wailsjsdir": "/Users/umekikazuya/src/github.com/umekikazuya/kura/frontend",
+  "wailsjsdir": "./frontend",
   "version": "2",
-  "projectdir": "/Users/umekikazuya/src/github.com/umekikazuya/kura",
+  "projectdir": ".",
   "build:dir": "build",
   "build:tags": "sqlite_fts5",
   "outputfilename": "kura",
@@ -23,11 +23,11 @@
     "email": "108924738+umekikazuya@users.noreply.github.com"
   },
   "Info": {
-    "companyName": "kura",
+    "companyName": "Kazuya Umeki",
     "productName": "kura",
-    "productVersion": "1.0.0",
-    "copyright": "Copyright.........",
-    "comments": "Built using Wails (https://wails.io)",
+    "productVersion": "0.1.0",
+    "copyright": "Copyright (c) 2026 Kazuya Umeki",
+    "comments": "kura - A blazing fast clipboard manager for macOS",
     "fileAssociations": null,
     "protocols": null
   },

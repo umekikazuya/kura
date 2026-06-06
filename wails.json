@@ -9,7 +9,7 @@
   "frontend:dev:serverUrl": "auto",
   "wailsjsdir": "./frontend",
   "version": "2",
-  "projectdir": ".",
+  "projectdir": "",
   "build:dir": "build",
   "build:tags": "sqlite_fts5",
   "outputfilename": "kura",

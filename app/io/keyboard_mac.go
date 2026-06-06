@@ -21,9 +21,18 @@ void simulateCmdV() {
 
     // Virtual keycode for 'v' is 9
     CGEventRef vDown = CGEventCreateKeyboardEvent(source, (CGKeyCode)9, true);
+    if (vDown == NULL) {
+        CFRelease(source);
+        return;
+    }
     CGEventSetFlags(vDown, kCGEventFlagMaskCommand);
 
     CGEventRef vUp = CGEventCreateKeyboardEvent(source, (CGKeyCode)9, false);
+    if (vUp == NULL) {
+        CFRelease(vDown);
+        CFRelease(source);
+        return;
+    }
     CGEventSetFlags(vUp, kCGEventFlagMaskCommand);
 
     CGEventPost(kCGHIDEventTap, vDown);

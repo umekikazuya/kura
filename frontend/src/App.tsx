@@ -23,7 +23,10 @@ function App() {
   // Initialize data and listeners
   useEffect(() => {
     fetchClips()
-    initListener()
+    const unsubscribe = initListener()
+    return () => {
+      if (unsubscribe) unsubscribe()
+    }
   }, [])
 
   // Set up global keyboard shortcuts
@@ -180,7 +183,7 @@ function App() {
           className="text-xs text-slate-500 ml-4"
           style={{ WebkitAppRegion: 'no-drag' } as any}
         >
-          {selectedIndex + 1}/{clips.length}
+          {clips.length === 0 ? 0 : selectedIndex + 1}/{clips.length}
         </span>
       </div>
     </div>

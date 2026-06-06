@@ -5,33 +5,44 @@ package io
 #cgo LDFLAGS: -framework Foundation -framework AppKit
 #import <Foundation/Foundation.h>
 #import <AppKit/AppKit.h>
+#include <stdlib.h>
 
 long getPasteboardChangeCount() {
-    NSPasteboard *pb = [NSPasteboard generalPasteboard];
-    return [pb changeCount];
+    @autoreleasepool {
+        NSPasteboard *pb = [NSPasteboard generalPasteboard];
+        return [pb changeCount];
+    }
 }
 
 int isConcealed() {
-    NSPasteboard *pb = [NSPasteboard generalPasteboard];
-    NSArray *types = [pb types];
-    // Check for standard Apple concealed type and 1Password specific type
-    if ([types containsObject:@"org.nspasteboard.ConcealedType"] || [types containsObject:@"com.agilebits.onepassword"]) {
-        return 1;
+    @autoreleasepool {
+        NSPasteboard *pb = [NSPasteboard generalPasteboard];
+        NSArray *types = [pb types];
+        // Check for standard Apple concealed type and 1Password specific type
+        if ([types containsObject:@"org.nspasteboard.ConcealedType"] || [types containsObject:@"com.agilebits.onepassword"]) {
+            return 1;
+        }
+        return 0;
     }
-    return 0;
 }
 
-const char* getPasteboardString() {
-    NSPasteboard *pb = [NSPasteboard generalPasteboard];
-    NSString *str = [pb stringForType:NSPasteboardTypeString];
-    if (str == nil) {
-        return NULL;
+char* getPasteboardString() {
+    @autoreleasepool {
+        NSPasteboard *pb = [NSPasteboard generalPasteboard];
+        NSString *str = [pb stringForType:NSPasteboardTypeString];
+        if (str == nil) {
+            return NULL;
+        }
+        return strdup([str UTF8String]);
     }
-    return [str UTF8String];
 }
 */
 import "C"
-import "errors"
+
+import (
+	"errors"
+	"unsafe"
+)
 
 // GetClipboardChangeCount returns the current change count of the Mac clipboard.
 func GetClipboardChangeCount() int64 {
@@ -49,5 +60,6 @@ func GetClipboardText() (string, error) {
 	if cStr == nil {
 		return "", errors.New("no string data in clipboard")
 	}
+	defer C.free(unsafe.Pointer(cStr))
 	return C.GoString(cStr), nil
 }

@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"strings"
 	"unicode/utf8"
 
 	_ "github.com/mattn/go-sqlite3"
@@ -36,6 +37,7 @@ func NewSQLiteRepository() (domain.ClipRepository, error) {
 
 	repo := &sqliteRepo{db: db}
 	if err := repo.initSchema(); err != nil {
+		_ = db.Close()
 		return nil, err
 	}
 
@@ -79,6 +81,9 @@ func (r *sqliteRepo) initSchema() error {
 }
 
 func (r *sqliteRepo) Save(ctx context.Context, item *domain.ClipItem) error {
+	if item == nil {
+		return fmt.Errorf("item cannot be nil")
+	}
 	query := `
 	INSERT INTO clips (id, content, created_at, updated_at)
 	VALUES (?, ?, ?, ?)
@@ -143,7 +148,8 @@ func (r *sqliteRepo) Search(ctx context.Context, queryStr string, limit, offset 
 		LIMIT ? OFFSET ?
 		`
 		// Quote wrapping prevents syntax errors with special characters in FTS queries
-		matchArg = fmt.Sprintf(`"%s"`, queryStr)
+		safeQuery := strings.ReplaceAll(queryStr, `"`, `""`)
+		matchArg = fmt.Sprintf(`"%s"`, safeQuery)
 	}
 
 	rows, err := r.db.QueryContext(ctx, query, matchArg, limit, offset)

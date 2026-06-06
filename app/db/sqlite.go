@@ -37,7 +37,7 @@ func NewSQLiteRepository() (domain.ClipRepository, error) {
 
 	repo := &sqliteRepo{db: db}
 	if err := repo.initSchema(); err != nil {
-		db.Close()
+		_ = db.Close()
 		return nil, err
 	}
 

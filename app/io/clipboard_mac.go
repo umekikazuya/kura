@@ -38,6 +38,7 @@ char* getPasteboardString() {
 }
 */
 import "C"
+
 import (
 	"errors"
 	"unsafe"

@@ -75,10 +75,3 @@ func (m *ClipboardMonitor) processClipboard(ctx context.Context) {
 		}
 	}
 }
-
-func min(a, b int) int {
-	if a < b {
-		return a
-	}
-	return b
-}

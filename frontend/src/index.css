@@ -1,17 +1,58 @@
 @import "tailwindcss";
 
 @theme {
-  --color-app-bg: #1e1e1e;
-  --color-app-text: #e0e0e0;
+  --color-app-bg: rgba(15, 23, 42, 0.6); /* Translucent slate-900 */
+  --color-item-hover: rgba(51, 65, 85, 0.4);
+  --color-item-selected: rgba(
+    56,
+    189,
+    248,
+    0.15
+  ); /* Sky-400 with low opacity */
+  --color-item-border: rgba(56, 189, 248, 0.5);
 }
 
-body {
-  margin: 0;
-  padding: 0;
-  background-color: var(--color-app-bg);
-  color: var(--color-app-text);
-  overflow: hidden; /* kura will use virtual scrolling internally */
-  font-family:
-    ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
-    "Segoe UI Symbol", "Noto Color Emoji";
+@layer base {
+  body,
+  html {
+    margin: 0;
+    padding: 0;
+    /* Frameless drag support in Wails */
+    --wails-draggable: drag;
+    /* Make the entire app background translucent to support macOS vibrancy */
+    background-color: transparent;
+    color: #e2e8f0; /* slate-200 */
+    font-family:
+      "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,
+      Arial, sans-serif;
+    height: 100vh;
+    overflow: hidden;
+  }
+
+  #root {
+    height: 100vh;
+    width: 100vw;
+  }
+
+  /* Prevent dragging on interactive elements */
+  input,
+  button,
+  .list-item-container {
+    --wails-draggable: no-drag;
+  }
+}
+
+/* Hide scrollbar for a cleaner look */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.2);
 }

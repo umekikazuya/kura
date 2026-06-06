@@ -1,13 +1,49 @@
 {
-  "$schema": "https://wails.io/schemas/config.v2.json",
   "name": "kura",
-  "outputfilename": "kura",
-  "frontend:install": "pnpm install",
   "frontend:build": "pnpm run build",
+  "frontend:install": "pnpm install",
+  "frontend:dev": "",
+  "frontend:dev:build": "",
+  "frontend:dev:install": "",
   "frontend:dev:watcher": "pnpm run dev",
   "frontend:dev:serverUrl": "auto",
-  "author": {
+  "wailsjsdir": "/Users/umekikazuya/src/github.com/umekikazuya/kura/frontend",
+  "version": "2",
+  "projectdir": "/Users/umekikazuya/src/github.com/umekikazuya/kura",
+  "build:dir": "build",
+  "build:tags": "sqlite_fts5",
+  "outputfilename": "kura",
+  "OutputType": "",
+  "Platform": "",
+  "runNonNativeBuildHooks": false,
+  "postBuildHooks": null,
+  "preBuildHooks": null,
+  "Author": {
     "name": "Kazuya Umeki",
     "email": "108924738+umekikazuya@users.noreply.github.com"
+  },
+  "Info": {
+    "companyName": "kura",
+    "productName": "kura",
+    "productVersion": "1.0.0",
+    "copyright": "Copyright.........",
+    "comments": "Built using Wails (https://wails.io)",
+    "fileAssociations": null,
+    "protocols": null
+  },
+  "debounceMS": 100,
+  "devServer": "localhost:34115",
+  "appargs": "",
+  "nsisType": "multiple",
+  "obfuscated": false,
+  "garbleargs": "",
+  "frontend:dir": "frontend",
+  "viteServerTimeout": 10,
+  "bindings": {
+    "ts_generation": {
+      "prefix": "",
+      "suffix": "",
+      "outputType": ""
+    }
   }
 }

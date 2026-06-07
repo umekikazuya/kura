@@ -1,16 +1,13 @@
 name: CI
 
 on:
-  push:
-    branches:
-      - "develop"
   pull_request:
     branches:
       - "develop"
 
 jobs:
   Backend:
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
     timeout-minutes: 20
     steps:
       - name: Checkout

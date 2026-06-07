@@ -52,6 +52,11 @@ jobs:
         working-directory: build/bin
         run: |
           npx create-dmg@8.1.0 --overwrite --no-code-sign kura.app
+          if [ "${GITHUB_REF_TYPE}" = "tag" ]; then
+            mv ./*.dmg "kura_${GITHUB_REF_NAME}.dmg"
+          else
+            mv ./*.dmg "kura_manual_${GITHUB_RUN_NUMBER}.dmg"
+          fi
 
       - name: Generate Checksums
         working-directory: build/bin

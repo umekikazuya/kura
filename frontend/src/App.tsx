@@ -27,7 +27,7 @@ function App() {
     return () => {
       if (unsubscribe) unsubscribe()
     }
-  }, [])
+  }, [initListener, fetchClips])
 
   // Set up global keyboard shortcuts
   useKeyBindings(searchInputRef)
@@ -48,28 +48,28 @@ function App() {
   }, [selectedIndex, rowVirtualizer, clips.length])
 
   return (
-    <div className="flex flex-col h-screen bg-app-bg text-slate-200 antialiased overflow-hidden selection:bg-sky-500/30">
+    <div className="flex h-screen flex-col overflow-hidden bg-app-bg text-slate-200 antialiased selection:bg-sky-500/30">
       {/* Draggable Top Padding (to allow moving the frameless window) */}
       <div
-        className="flex-none h-4"
-        style={{ WebkitAppRegion: 'drag' } as any}
+        className="h-4 flex-none"
+        style={{ WebkitAppRegion: 'drag' } as React.CSSProperties}
       />
 
       {/* Virtualized List Container */}
       <div
         ref={parentRef}
         className="flex-1 overflow-auto p-2"
-        style={{ WebkitAppRegion: 'no-drag' } as any}
+        style={{ WebkitAppRegion: 'no-drag' } as React.CSSProperties}
       >
         {isLoading && clips.length === 0 ? (
-          <div className="flex justify-center items-center h-32 text-slate-500">
-            <div className="animate-pulse flex items-center gap-2">
+          <div className="flex h-32 items-center justify-center text-slate-500">
+            <div className="flex animate-pulse items-center gap-2">
               <Search className="h-4 w-4" />
               <span>Loading...</span>
             </div>
           </div>
         ) : clips.length === 0 ? (
-          <div className="flex flex-col justify-center items-center h-64 text-slate-500 gap-3">
+          <div className="flex h-64 flex-col items-center justify-center gap-3 text-slate-500">
             <Copy className="h-8 w-8 opacity-50" />
             <p>No clips found</p>
           </div>
@@ -102,22 +102,17 @@ function App() {
                     onDoubleClick={() =>
                       PasteClip(item.content).catch(console.error)
                     }
-                    className={`
-                      list-item-container flex flex-col gap-1 p-3 rounded-lg cursor-pointer
-                      transition-all duration-200 ease-out border
-                      ${
-                        isSelected
-                          ? 'bg-item-selected border-item-border shadow-[0_0_15px_rgba(56,189,248,0.15)] ring-1 ring-sky-500/50'
-                          : 'bg-slate-800/30 border-transparent hover:bg-item-hover'
-                      }
+                    className={`flex cursor-pointer list-item-container flex-col gap-1 rounded-lg border p-3 transition-all duration-200 ease-out ${
+                      isSelected
+                        ? 'border-item-border bg-item-selected shadow-[0_0_15px_rgba(56,189,248,0.15)] ring-1 ring-sky-500/50'
+                        : 'border-transparent bg-slate-800/30 hover:bg-item-hover'
+                    }
                     `}
                   >
-                    <div className="flex justify-between items-start gap-4">
+                    <div className="flex items-start justify-between gap-4">
                       {/* Content Preview */}
                       <p
-                        className={`
-                        text-sm font-medium leading-relaxed truncate-2-lines
-                        ${isSelected ? 'text-white' : 'text-slate-300'}
+                        className={`truncate-2-lines font-medium text-sm leading-relaxed ${isSelected ? 'text-white' : 'text-slate-300'}
                       `}
                         style={{
                           display: '-webkit-box',
@@ -131,16 +126,16 @@ function App() {
 
                       {/* Shortcut hint */}
                       {isSelected && (
-                        <div className="flex-none flex items-center justify-center bg-sky-500/20 text-sky-300 rounded px-2 py-0.5 text-xs font-bold border border-sky-500/30">
+                        <div className="flex flex-none items-center justify-center rounded border border-sky-500/30 bg-sky-500/20 px-2 py-0.5 font-bold text-sky-300 text-xs">
                           ↵ Enter
                         </div>
                       )}
                     </div>
 
                     {/* Meta Data */}
-                    <div className="flex items-center gap-3 text-xs text-slate-500 font-mono mt-1">
+                    <div className="mt-1 flex items-center gap-3 font-mono text-slate-500 text-xs">
                       <span className="flex items-center gap-1">
-                        <Clock className="w-3 h-3" />
+                        <Clock className="h-3 w-3" />
                         {new Date(item.updated_at).toLocaleTimeString([], {
                           hour: '2-digit',
                           minute: '2-digit',
@@ -148,7 +143,7 @@ function App() {
                         })}
                       </span>
                       <span className="flex items-center gap-1">
-                        <Hash className="w-3 h-3" />
+                        <Hash className="h-3 w-3" />
                         {item.id.substring(0, 8)}
                       </span>
                     </div>
@@ -162,26 +157,26 @@ function App() {
 
       {/* Bottom Vim-like Status/Search Bar */}
       <div
-        className="flex-none flex items-center bg-slate-900/80 backdrop-blur-md border-t border-slate-800 text-slate-400 font-mono text-sm px-3 py-1.5"
-        style={{ WebkitAppRegion: 'drag' } as any}
+        className="flex flex-none items-center border-slate-800 border-t bg-slate-900/80 px-3 py-1.5 font-mono text-slate-400 text-sm backdrop-blur-md"
+        style={{ WebkitAppRegion: 'drag' } as React.CSSProperties}
       >
         <span
-          className={`${searchQuery ? 'text-sky-400' : 'text-slate-500'} font-bold mr-2`}
+          className={`${searchQuery ? 'text-sky-400' : 'text-slate-500'} mr-2 font-bold`}
         >
           {searchQuery ? '/' : ':'}
         </span>
         <input
           ref={searchInputRef}
           type="text"
-          className="flex-1 bg-transparent border-none outline-none focus:ring-0 text-sky-100 placeholder-slate-600"
+          className="flex-1 border-none bg-transparent text-sky-100 placeholder-slate-600 outline-none focus:ring-0"
           placeholder="type / to search..."
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          style={{ WebkitAppRegion: 'no-drag' } as any}
+          style={{ WebkitAppRegion: 'no-drag' } as React.CSSProperties}
         />
         <span
-          className="text-xs text-slate-500 ml-4"
-          style={{ WebkitAppRegion: 'no-drag' } as any}
+          className="ml-4 text-slate-500 text-xs"
+          style={{ WebkitAppRegion: 'no-drag' } as React.CSSProperties}
         >
           {clips.length === 0 ? 0 : selectedIndex + 1}/{clips.length}
         </span>

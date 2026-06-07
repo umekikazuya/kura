@@ -13,6 +13,14 @@ void hideApplication() {
     });
 }
 
+bool isApplicationHidden() {
+    __block bool hidden = false;
+    dispatch_sync(dispatch_get_main_queue(), ^{
+        hidden = [NSApp isHidden];
+    });
+    return hidden;
+}
+
 void simulateCmdV() {
     CGEventSourceRef source = CGEventSourceCreate(kCGEventSourceStateHIDSystemState);
     if (source == NULL) {
@@ -48,6 +56,11 @@ import "C"
 // HideApplication hides the entire macOS application to yield focus.
 func HideApplication() {
 	C.hideApplication()
+}
+
+// IsApplicationHidden returns true if the macOS application is currently hidden.
+func IsApplicationHidden() bool {
+	return bool(C.isApplicationHidden())
 }
 
 // SimulateCmdV sends a Command+V keystroke to the macOS system.

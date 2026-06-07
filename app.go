@@ -45,8 +45,8 @@ func (a *App) startup(ctx context.Context) {
 }
 
 func (a *App) registerGlobalHotkey() {
-	// Register Cmd + Shift + V
-	hk := hotkey.New([]hotkey.Modifier{hotkey.ModCmd, hotkey.ModShift}, hotkey.KeyV)
+	// Register Cmd + Option + V
+	hk := hotkey.New([]hotkey.Modifier{hotkey.ModCmd, hotkey.ModOption}, hotkey.KeyV)
 	err := hk.Register()
 	if err != nil {
 		log.Printf("Failed to register global hotkey: %v", err)
@@ -56,8 +56,13 @@ func (a *App) registerGlobalHotkey() {
 	go func() {
 		for {
 			<-hk.Keydown()
-			log.Println("Global hotkey triggered, showing window")
-			runtime.WindowShow(a.ctx)
+			if io.IsApplicationHidden() {
+				log.Println("Global hotkey triggered, showing window")
+				a.ShowWindow()
+			} else {
+				log.Println("Global hotkey triggered, hiding window")
+				a.HideWindow()
+			}
 		}
 	}()
 }
@@ -75,6 +80,12 @@ func (a *App) SearchClips(query string, limit, offset int) ([]*domain.ClipItem, 
 // HideWindow hides the application window
 func (a *App) HideWindow() {
 	io.HideApplication()
+}
+
+// ShowWindow shows and activates the application window
+func (a *App) ShowWindow() {
+	io.ShowApplication()
+	runtime.WindowShow(a.ctx)
 }
 
 // PasteClip sets the clipboard text, hides the window, and simulates Cmd+V

@@ -13,6 +13,24 @@ void hideApplication() {
     });
 }
 
+void showApplication() {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [NSApp unhide:nil];
+        [NSApp activateIgnoringOtherApps:YES];
+    });
+}
+
+bool isApplicationHidden() {
+    if ([NSThread isMainThread]) {
+        return [NSApp isHidden];
+    }
+    __block bool hidden = false;
+    dispatch_sync(dispatch_get_main_queue(), ^{
+        hidden = [NSApp isHidden];
+    });
+    return hidden;
+}
+
 void simulateCmdV() {
     CGEventSourceRef source = CGEventSourceCreate(kCGEventSourceStateHIDSystemState);
     if (source == NULL) {
@@ -48,6 +66,16 @@ import "C"
 // HideApplication hides the entire macOS application to yield focus.
 func HideApplication() {
 	C.hideApplication()
+}
+
+// ShowApplication unhides and activates the macOS application.
+func ShowApplication() {
+	C.showApplication()
+}
+
+// IsApplicationHidden returns true if the macOS application is currently hidden.
+func IsApplicationHidden() bool {
+	return bool(C.isApplicationHidden())
 }
 
 // SimulateCmdV sends a Command+V keystroke to the macOS system.

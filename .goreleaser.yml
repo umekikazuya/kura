@@ -15,8 +15,9 @@ release:
     - glob: build/bin/checksums.txt
 
 changelog:
-    sort: asc
-    filters:
-      exclude:
-        - "^docs:"
-        - "^test:"
+  sort: asc
+  filters:
+    exclude:
+      - "^docs:"
+      - "^Merge pull request"
+      - "^Merge branch"

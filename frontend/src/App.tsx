@@ -89,6 +89,7 @@ function App() {
               position: 'relative',
             }}
           >
+            {/* biome-ignore lint/complexity/noExcessiveCognitiveComplexity: Virtualizer item logic is self-contained */}
             {rowVirtualizer.getVirtualItems().map((virtualRow) => {
               const item = clips[virtualRow.index]
               const isSelected = virtualRow.index === selectedIndex
@@ -115,6 +116,8 @@ function App() {
                     transform: `translateY(${virtualRow.start}px)`,
                   }}
                 >
+                  {/* biome-ignore lint/a11y/useKeyWithClickEvents: Handled by global bindings */}
+                  {/* biome-ignore lint/a11y/noStaticElementInteractions: List item */}
                   <div
                     onClick={() => setSelectedIndex(virtualRow.index)}
                     onDoubleClick={() =>

@@ -32,21 +32,14 @@ export const useClipStore = create<ClipState>((set, get) => ({
 
   setSelectedIndex: (indexOrUpdater) => {
     set((state) => {
-      let newIndex =
+      const target =
         typeof indexOrUpdater === 'function'
           ? indexOrUpdater(state.selectedIndex)
           : indexOrUpdater
 
-      // Bounds check
-      if (state.clips.length === 0) {
-        newIndex = 0
-      } else {
-        if (newIndex < 0) newIndex = 0
-        if (newIndex >= state.clips.length) {
-          newIndex = state.clips.length - 1
-        }
-      }
+      if (state.clips.length === 0) return { selectedIndex: 0 }
 
+      const newIndex = Math.max(0, Math.min(target, state.clips.length - 1))
       return { selectedIndex: newIndex }
     })
   },

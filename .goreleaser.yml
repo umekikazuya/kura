@@ -1,0 +1,22 @@
+version: 2
+
+project_name: kura
+dist: dist/app
+
+builds:
+  - id: app
+    skip: true
+
+release:
+  mode: append
+  replace_existing_artifacts: true
+  extra_files:
+    - glob: build/bin/*.dmg
+    - glob: build/bin/checksums.txt
+
+changelog:
+    sort: asc
+    filters:
+      exclude:
+        - "^docs:"
+        - "^test:"

@@ -13,7 +13,17 @@ void hideApplication() {
     });
 }
 
+void showApplication() {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [NSApp unhide:nil];
+        [NSApp activateIgnoringOtherApps:YES];
+    });
+}
+
 bool isApplicationHidden() {
+    if ([NSThread isMainThread]) {
+        return [NSApp isHidden];
+    }
     __block bool hidden = false;
     dispatch_sync(dispatch_get_main_queue(), ^{
         hidden = [NSApp isHidden];
@@ -56,6 +66,11 @@ import "C"
 // HideApplication hides the entire macOS application to yield focus.
 func HideApplication() {
 	C.hideApplication()
+}
+
+// ShowApplication unhides and activates the macOS application.
+func ShowApplication() {
+	C.showApplication()
 }
 
 // IsApplicationHidden returns true if the macOS application is currently hidden.

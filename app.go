@@ -58,7 +58,7 @@ func (a *App) registerGlobalHotkey() {
 			<-hk.Keydown()
 			if io.IsApplicationHidden() {
 				log.Println("Global hotkey triggered, showing window")
-				runtime.WindowShow(a.ctx)
+				a.ShowWindow()
 			} else {
 				log.Println("Global hotkey triggered, hiding window")
 				a.HideWindow()
@@ -80,6 +80,12 @@ func (a *App) SearchClips(query string, limit, offset int) ([]*domain.ClipItem, 
 // HideWindow hides the application window
 func (a *App) HideWindow() {
 	io.HideApplication()
+}
+
+// ShowWindow shows and activates the application window
+func (a *App) ShowWindow() {
+	io.ShowApplication()
+	runtime.WindowShow(a.ctx)
 }
 
 // PasteClip sets the clipboard text, hides the window, and simulates Cmd+V

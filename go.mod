@@ -5,7 +5,7 @@ go 1.26.4
 require (
 	github.com/mattn/go-sqlite3 v1.14.45
 	github.com/wailsapp/wails/v2 v2.12.0
-	golang.design/x/hotkey v0.6.1
+	golang.design/x/hotkey v0.5.0
 )
 
 require (

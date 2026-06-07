@@ -20,6 +20,12 @@ void showApplication() {
     });
 }
 
+void setActivationPolicyAccessory() {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [NSApp setActivationPolicy:NSApplicationActivationPolicyAccessory];
+    });
+}
+
 bool isApplicationHidden() {
     if ([NSThread isMainThread]) {
         return [NSApp isHidden];
@@ -29,6 +35,17 @@ bool isApplicationHidden() {
         hidden = [NSApp isHidden];
     });
     return hidden;
+}
+
+bool isApplicationActive() {
+    if ([NSThread isMainThread]) {
+        return [NSApp isActive];
+    }
+    __block bool active = false;
+    dispatch_sync(dispatch_get_main_queue(), ^{
+        active = [NSApp isActive];
+    });
+    return active;
 }
 
 void simulateCmdV() {
@@ -76,6 +93,16 @@ func ShowApplication() {
 // IsApplicationHidden returns true if the macOS application is currently hidden.
 func IsApplicationHidden() bool {
 	return bool(C.isApplicationHidden())
+}
+
+// IsApplicationActive returns true if the macOS application is currently active.
+func IsApplicationActive() bool {
+	return bool(C.isApplicationActive())
+}
+
+// SetActivationPolicyAccessory hides the dock icon by setting the activation policy.
+func SetActivationPolicyAccessory() {
+	C.setActivationPolicyAccessory()
 }
 
 // SimulateCmdV sends a Command+V keystroke to the macOS system.

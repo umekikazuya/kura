@@ -42,6 +42,9 @@ func (a *App) startup(ctx context.Context) {
 
 	// Register global hotkey
 	a.registerGlobalHotkey()
+
+	// Hide the app from the Dock
+	io.SetActivationPolicyAccessory()
 }
 
 func (a *App) registerGlobalHotkey() {
@@ -56,7 +59,7 @@ func (a *App) registerGlobalHotkey() {
 	go func() {
 		for {
 			<-hk.Keydown()
-			if io.IsApplicationHidden() {
+			if !io.IsApplicationActive() {
 				log.Println("Global hotkey triggered, showing window")
 				a.ShowWindow()
 			} else {

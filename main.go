@@ -53,6 +53,7 @@ func main() {
 		Mac: &mac.Options{
 			WebviewIsTransparent: true,
 			WindowIsTranslucent:  true,
+			Appearance:           mac.NSAppearanceNameVibrantLight,
 			TitleBar: &mac.TitleBar{
 				TitlebarAppearsTransparent: true,
 				HideTitle:                  true,

@@ -1,17 +1,5 @@
 @import "tailwindcss";
 
-@theme {
-  --color-app-bg: rgba(15, 23, 42, 0.6); /* Translucent slate-900 */
-  --color-item-hover: rgba(51, 65, 85, 0.4);
-  --color-item-selected: rgba(
-    56,
-    189,
-    248,
-    0.15
-  ); /* Sky-400 with low opacity */
-  --color-item-border: rgba(56, 189, 248, 0.5);
-}
-
 @layer base {
   body,
   html {
@@ -19,14 +7,17 @@
     padding: 0;
     /* Frameless drag support in Wails */
     --wails-draggable: drag;
-    /* Make the entire app background translucent to support macOS vibrancy */
+    /* macOS native vibrancy passes through */
     background-color: transparent;
-    color: #e2e8f0; /* slate-200 */
+    color: #f8fafc;
+    /* Stick to macOS system font */
     font-family:
-      Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,
-      Arial, sans-serif;
+      -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial,
+      sans-serif;
     height: 100vh;
     overflow: hidden;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 
   #root {
@@ -42,17 +33,7 @@
   }
 }
 
-/* Hide scrollbar for a cleaner look */
+/* Hide scrollbar completely for a seamless glass look */
 ::-webkit-scrollbar {
-  width: 6px;
-}
-::-webkit-scrollbar-track {
-  background: transparent;
-}
-::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 4px;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.2);
+  display: none;
 }

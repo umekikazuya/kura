@@ -17,3 +17,7 @@ export function PasteClip(arg1) {
 export function SearchClips(arg1, arg2, arg3) {
   return window['go']['main']['App']['SearchClips'](arg1, arg2, arg3);
 }
+
+export function ShowWindow() {
+  return window['go']['main']['App']['ShowWindow']();
+}

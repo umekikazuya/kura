@@ -1,0 +1,68 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  Build:
+    runs-on: macos-14
+    timeout-minutes: 15
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Setup Go
+        uses: actions/setup-go@v6
+        with:
+          go-version-file: ".go-version"
+          cache-dependency-path: "go.sum"
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v5
+        with:
+          version: "11.5.2"
+
+      - name: Setup Node
+        uses: actions/setup-node@v5
+        with:
+          node-version: "22"
+          cache: "pnpm"
+          cache-dependency-path: "./frontend/pnpm-lock.yaml"
+
+      - name: Install Wails
+        run: go install github.com/wailsapp/wails/v2/cmd/wails@v2.12.0
+
+      - name: Build macOS App
+        run: |
+          wails build -platform darwin/universal -clean
+
+      - name: Create DMG
+        working-directory: build/bin
+        run: |
+          npx create-dmg@8.1.0 --overwrite --no-code-sign kura.app
+
+      - name: Generate Checksums
+        working-directory: build/bin
+        run: |
+          shasum -a 256 *.dmg > checksums.txt
+
+      - name: Release with GoReleaser
+        uses: goreleaser/goreleaser-action@v7.2.2
+        with:
+          distribution: goreleaser
+          version: "~> v2"
+          args: release --clean --config .goreleaser.yml
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -1,16 +1,13 @@
 name: CI
 
 on:
-  push:
-    branches:
-      - "develop"
   pull_request:
     branches:
       - "develop"
 
 jobs:
   Backend:
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
     timeout-minutes: 20
     steps:
       - name: Checkout
@@ -21,6 +18,9 @@ jobs:
         with:
           go-version-file: ".go-version"
           cache-dependency-path: "go.sum"
+
+      - name: Create dummy frontend/dist for go:embed
+        run: mkdir -p frontend/dist && touch frontend/dist/index.html
 
       - name: Lint App
         uses: golangci/golangci-lint-action@v9

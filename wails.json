@@ -1,13 +1,49 @@
 {
-  "$schema": "https://wails.io/schemas/config.v2.json",
   "name": "kura",
-  "outputfilename": "kura",
-  "frontend:install": "pnpm install",
   "frontend:build": "pnpm run build",
+  "frontend:install": "pnpm install",
+  "frontend:dev": "",
+  "frontend:dev:build": "",
+  "frontend:dev:install": "",
   "frontend:dev:watcher": "pnpm run dev",
   "frontend:dev:serverUrl": "auto",
-  "author": {
+  "wailsjsdir": "./frontend",
+  "version": "2",
+  "projectdir": "",
+  "build:dir": "build",
+  "build:tags": "sqlite_fts5",
+  "outputfilename": "kura",
+  "OutputType": "",
+  "Platform": "",
+  "runNonNativeBuildHooks": false,
+  "postBuildHooks": null,
+  "preBuildHooks": null,
+  "Author": {
     "name": "Kazuya Umeki",
     "email": "108924738+umekikazuya@users.noreply.github.com"
+  },
+  "Info": {
+    "companyName": "Kazuya Umeki",
+    "productName": "kura",
+    "productVersion": "0.1.0",
+    "copyright": "Copyright (c) 2026 Kazuya Umeki",
+    "comments": "kura - A blazing fast clipboard manager for macOS",
+    "fileAssociations": null,
+    "protocols": null
+  },
+  "debounceMS": 100,
+  "devServer": "localhost:34115",
+  "appargs": "",
+  "nsisType": "multiple",
+  "obfuscated": false,
+  "garbleargs": "",
+  "frontend:dir": "frontend",
+  "viteServerTimeout": 10,
+  "bindings": {
+    "ts_generation": {
+      "prefix": "",
+      "suffix": "",
+      "outputType": ""
+    }
   }
 }

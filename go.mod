@@ -1,8 +1,12 @@
-module myproject
+module github.com/umekikazuya/kura
 
-go 1.26.3
+go 1.26.4
 
-require github.com/wailsapp/wails/v2 v2.12.0
+require (
+	github.com/mattn/go-sqlite3 v1.14.45
+	github.com/wailsapp/wails/v2 v2.12.0
+	golang.design/x/hotkey v0.4.1
+)
 
 require (
 	git.sr.ht/~jackmordaunt/go-toast/v2 v2.0.3 // indirect

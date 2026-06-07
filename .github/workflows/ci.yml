@@ -19,6 +19,9 @@ jobs:
           go-version-file: ".go-version"
           cache-dependency-path: "go.sum"
 
+      - name: Create dummy frontend/dist for go:embed
+        run: mkdir -p frontend/dist && touch frontend/dist/index.html
+
       - name: Lint App
         uses: golangci/golangci-lint-action@v9
         with:

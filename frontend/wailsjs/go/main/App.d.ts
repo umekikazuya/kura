@@ -9,3 +9,5 @@ export function HideWindow():Promise<void>;
 export function PasteClip(arg1:string):Promise<void>;
 
 export function SearchClips(arg1:string,arg2:number,arg3:number):Promise<Array<domain.ClipItem>>;
+
+export function ShowWindow():Promise<void>;

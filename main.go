@@ -8,6 +8,7 @@ import (
 	"github.com/wailsapp/wails/v2/pkg/options"
 	"github.com/wailsapp/wails/v2/pkg/options/assetserver"
 	"github.com/wailsapp/wails/v2/pkg/options/mac"
+	"github.com/wailsapp/wails/v2/pkg/runtime"
 
 	"github.com/umekikazuya/kura/app/db"
 	"github.com/umekikazuya/kura/app/usecase"
@@ -35,6 +36,12 @@ func main() {
 		Width:     800,
 		Height:    600,
 		Frameless: true,
+		SingleInstanceLock: &options.SingleInstanceLock{
+			UniqueId: "com.umekikazuya.kura",
+			OnSecondInstanceLaunch: func(data options.SecondInstanceData) {
+				runtime.WindowShow(app.ctx)
+			},
+		},
 		AssetServer: &assetserver.Options{
 			Assets: assets,
 		},

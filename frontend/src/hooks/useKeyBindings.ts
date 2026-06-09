@@ -1,11 +1,14 @@
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import { HideWindow, PasteClip } from '../../wailsjs/go/main/App'
 import { useClipStore } from '../store/clipStore'
+
+const GG_TIMEOUT_MS = 500
 
 export function useKeyBindings(
   searchInputRef: React.RefObject<HTMLInputElement | null>,
 ) {
   const { setSelectedIndex, clips } = useClipStore()
+  const lastGPressedAtRef = useRef<number | null>(null)
 
   useEffect(() => {
     // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: Intentional monolithic key handler
@@ -18,6 +21,7 @@ export function useKeyBindings(
       const isInputFocused = document.activeElement?.tagName === 'INPUT'
 
       if (isInputFocused) {
+        lastGPressedAtRef.current = null
         if (e.key === 'ArrowDown') {
           e.preventDefault()
           setSelectedIndex((prev) => prev + 1)
@@ -33,6 +37,28 @@ export function useKeyBindings(
         }
         return
       }
+
+      if (e.key === 'g') {
+        e.preventDefault()
+        if (e.repeat) {
+          return
+        }
+
+        const now = Date.now()
+        if (
+          lastGPressedAtRef.current !== null &&
+          now - lastGPressedAtRef.current <= GG_TIMEOUT_MS
+        ) {
+          setSelectedIndex(0)
+          lastGPressedAtRef.current = null
+          return
+        }
+
+        lastGPressedAtRef.current = now
+        return
+      }
+
+      lastGPressedAtRef.current = null
 
       // VIM-style navigation when input is NOT focused
       if (e.key === 'Escape') {

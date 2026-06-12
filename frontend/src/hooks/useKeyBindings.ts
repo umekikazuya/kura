@@ -12,7 +12,7 @@ export function useKeyBindings(
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      const isInputFocused = document.activeElement?.tagName === 'INPUT'
+      const isInputFocused = document.activeElement === searchInputRef.current
       const mode = isInputFocused ? 'search' : 'normal'
       sequenceRef.current = handleKeydown(
         {
@@ -34,7 +34,7 @@ export function useKeyBindings(
             searchInputRef.current?.blur()
           },
           hideWindow: () => {
-            HideWindow()
+            void HideWindow().catch(console.error)
           },
           pasteSelected: () => {
             const { clips, selectedIndex } = useClipStore.getState()
